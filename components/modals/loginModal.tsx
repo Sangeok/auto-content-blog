@@ -23,19 +23,31 @@ import * as z from "zod";
 import { modalStore } from "@/store/modal-store";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm} from "react-hook-form";
+import { useFormState } from "react-dom";
 
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import {LoginAdmin} from "@/app/actions/loginAdmin";
+import { useEffect } from "react";
+import { userStore } from "@/store/user-store";
 
 const formSchema = z.object({
     id: z.string().nonempty("Id is required"),
     password: z.string().nonempty("Password is required"),
 });
 
+const initFormState = {
+    success : false,
+    message : "",
+}
+
 export default function LoginModal() {
     const {isOpen, onOpen, onClose} = modalStore();
+    const {loginAdmin} = userStore();
+
+    const [formState, formAction] = useFormState(LoginAdmin, initFormState);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -46,14 +58,13 @@ export default function LoginModal() {
         },
     })
 
-    const onSubmit = async (values : z.infer<typeof formSchema>) => {
-
-        // need to make server action.
-
-        console.log(values);
-        form.reset();
-        onClose();
-    }
+    useEffect(()=>{
+        if(formState.success) {
+            form.reset();
+            onClose();
+            loginAdmin();
+        }
+    }, [formState])
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -62,7 +73,7 @@ export default function LoginModal() {
                     <DialogTitle className="text-2xl text-center font-bold">Are you SangEok?</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <form action={formAction} className="space-y-8">
                         <div className="space-y-8 px-6">
                         <FormField
                             control={form.control}

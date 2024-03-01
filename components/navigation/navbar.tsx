@@ -1,11 +1,13 @@
 "use client";
 
 import { modalStore } from "@/store/modal-store";
+import { userStore } from "@/store/user-store";
 
 import Link from "next/link";
 
 export default function Navbar() {
     const {onOpen, isOpen} = modalStore();
+    const {isAdmin, logOutAdmin} = userStore();
 
     return (
         <div className="mb-5">
@@ -18,9 +20,20 @@ export default function Navbar() {
                     <div>
                         <Link href="/about">About</Link>
                     </div>
-                    <div onClick={()=>onOpen()}>
-                        Login
-                    </div>
+                    {
+                        !isAdmin && (
+                            <div onClick={()=>onOpen()}>
+                                Login
+                            </div>
+                        )
+                    }
+                    {
+                        isAdmin && (
+                            <div onClick={()=>logOutAdmin()}>
+                                Logout
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         </div>
