@@ -14,15 +14,15 @@ export default function Navbar() {
             <div className="flex justify-between items-center w-full bg-black text-white text-wh-10 px-10 py-4">
                 <div><Link href="/">SangEok</Link></div>
                 <div className="flex justify-between items-center gap-10">
-                    <div>
-                        <Link href="/posts">Posts</Link>
+                    <div onClick={()=>onOpen("post")}>
+                        Posts
                     </div>
                     <div>
                         <Link href="/about">About</Link>
                     </div>
                     {
                         !isAdmin && (
-                            <div onClick={()=>onOpen()}>
+                            <div onClick={()=>onOpen("login")}>
                                 Login
                             </div>
                         )

@@ -2,19 +2,14 @@
 
 import {
     Dialog,
-    DialogClose,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog";
 import {
     Form,
     FormControl,
-    FormLabel,
-    FormMessage,
     FormField,
     FormItem,
 } from "@/components/ui/form";
@@ -23,11 +18,10 @@ import * as z from "zod";
 import { modalStore } from "@/store/modal-store";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm} from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useFormState } from "react-dom";
 
 import { Button } from "../ui/button";
-import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import {LoginAdmin} from "@/app/actions/loginAdmin";
 import { useEffect } from "react";
@@ -44,10 +38,13 @@ const initFormState = {
 }
 
 export default function LoginModal() {
-    const {isOpen, onOpen, onClose} = modalStore();
+    const {isOpen, onOpen, onClose, type} = modalStore();
     const {loginAdmin} = userStore();
 
     const [formState, formAction] = useFormState(LoginAdmin, initFormState);
+
+    const isModalOpen = isOpen && type === "login";
+    
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -67,7 +64,7 @@ export default function LoginModal() {
     }, [formState])
 
     return (
-        <Dialog open={isOpen} onOpenChange={onClose}>
+        <Dialog open={isModalOpen} onOpenChange={onClose}>
             <DialogContent className="bg-white text-black p-0 overflow-hidden pb-8">
                 <DialogHeader className="pt-8 px-6">
                     <DialogTitle className="text-2xl text-center font-bold">Are you SangEok?</DialogTitle>

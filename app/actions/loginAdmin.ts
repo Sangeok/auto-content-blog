@@ -1,7 +1,6 @@
 "use server"
 
 import db from "@/lib/db";
-import { revalidatePath } from "next/cache";
 
 interface FormState {
     success : boolean
