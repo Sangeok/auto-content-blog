@@ -39,12 +39,11 @@ const initFormState = {
 
 export default function LoginModal() {
     const {isOpen, onOpen, onClose, type} = modalStore();
-    const {loginAdmin} = userStore();
+    const {loginAdmin, isAdmin} = userStore();
 
     const [formState, formAction] = useFormState(LoginAdmin, initFormState);
 
     const isModalOpen = isOpen && type === "login";
-    
 
     const form = useForm({
         resolver: zodResolver(formSchema),

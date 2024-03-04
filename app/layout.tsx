@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navigation/navbar";
 import { ModalProvider } from "@/components/providers/modal-provider";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,10 +19,13 @@ export default function RootLayout({
 }>) {
     return (
       <html lang="en">
+        
           <body className={inter.className}>
+            <EdgeStoreProvider>
               <ModalProvider />
               <Navbar />
               {children}
+            </EdgeStoreProvider>
           </body>
       </html>
     );

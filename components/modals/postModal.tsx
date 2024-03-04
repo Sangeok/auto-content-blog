@@ -9,12 +9,14 @@ import {
 import { modalStore } from "@/store/modal-store";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import { userStore } from "@/store/user-store";
 
 export default function PostModal() {
     const { isOpen, onClose, type } = modalStore();
+    const {isAdmin} = userStore();
     const router = useRouter();
 
-    const isModalOpen = isOpen && type === "post";
+    const isModalOpen = isAdmin && isOpen && type === "post";
 
     const onClick = (values : string) => {
         if(values === "ai") {
