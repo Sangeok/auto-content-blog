@@ -1,19 +1,23 @@
+"use server";
+
+import { PostsType } from "@/components/write/directWrite";
 import db from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
-export const CreatePosts = async (formData : FormData) => {
-    const title = formData.get("title") as string;
-    const content = formData.get("content") as string;
-    const imgUrl = formData.get("imageUrl") as string;
+export const CreatePosts = async (formData : PostsType) => {
+    new Promise((resolve) => setTimeout(resolve, 1000));
 
     const post = await db.posts.create({
         data : {
-            title,
-            content,
-            imgUrl
+            title : formData.title,
+            content : formData.content,
+            imgUrl : formData.imageUrl
         }
     })
 
-    revalidatePath("/");
-    
+    if(post) {
+        revalidatePath("/");
+        return {message : "Success", success : true}
+    }
+    return {message : "Failed", success : false}
 }

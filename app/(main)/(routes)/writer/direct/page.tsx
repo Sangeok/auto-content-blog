@@ -1,8 +1,7 @@
 import DirectWrite from "@/components/write/directWrite";
+import db from "@/lib/db";
 
-export default function WriterDirectPage() {
-    // 제목, 내용, 글쓰기, 이미지(흠)
-
+export default async function WriterDirectPage() {
     return (
         <DirectWrite />
     );

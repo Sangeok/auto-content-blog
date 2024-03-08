@@ -17,8 +17,8 @@ export const LoginAdmin = async (
     const admin = await db.admin.findFirst({
         where : {
             userId : id,
-            password : password
-        }
+            password : password,
+        },
     })
 
     if(admin) {

@@ -10,16 +10,17 @@ generator client {
 
 model Posts {
   id        Int      @id @default(autoincrement())
-  title     String
+  title     String   @unique
   content   String
   imgUrl    String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+
 }
 
 model Admin {
   id        Int      @id @default(autoincrement())
-  userId    String
+  userId    String   @unique
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())

@@ -10,7 +10,7 @@ import {
     FormLabel
 } from "../ui/form";
 import { Input } from "../ui/input";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { CreatePosts } from "@/app/actions/createPosts";
@@ -19,11 +19,11 @@ import FileUpload from "../file-upload";
 import EditorMenuBar from "../editorMenuBar";
 import Tiptap from "../tiptap";
 
-import { useEditor, EditorContent } from '@tiptap/react'
-import StarterKit from '@tiptap/starter-kit'
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState, useTransition } from "react";
 import { useEdgeStore } from "@/lib/edgestore";
 import { SingleImageDropzone } from "../ui/singleImageDropZone";
+import { userStore } from "@/store/user-store";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
     title : z
@@ -33,34 +33,14 @@ const formSchema = z.object({
     imageUrl : z.string().min(1, {message : "Image is required"}),
 })
 
+export type PostsType = z.infer<typeof formSchema>;
+
 export default function DirectWrite() {
 
+    const {isAdmin} = userStore();
+    const router = useRouter();
+
     const [file, setFile] = useState<File>();
-    const { edgestore } = useEdgeStore();
-
-    const uploadImgeHandler = async () => {
-        console.log("실행")
-        if (file) {
-            // 여기서 사진이 아니면 upload못하게 하면 좋긴한데 어짜피 나만 쓰니까 패스
-            const res = await edgestore.publicFiles.upload({
-                file,
-            });
-
-            if(res.url) {
-                // url이 등록 되고 나서 imageUrl을 저장해야함.
-                form.reset((formValues) => ({
-                    ...formValues,
-                    imageUrl : res.url,
-                }))
-            }
-        }
-    }
-
-    useEffect(()=>{
-        if(file) {
-            uploadImgeHandler();
-        }
-    }, [file]);
 
     const form = useForm({
         resolver: zodResolver(formSchema),
@@ -71,8 +51,19 @@ export default function DirectWrite() {
         },
     })
 
-    const onActions = (values : z.infer<typeof formSchema>) => {
-        console.log(values);
+    const [pending, startTransition] = useTransition();
+
+    const onSubmit = async (data : PostsType) => {
+        startTransition(async () => {
+            const res = await CreatePosts(data);
+            if(res?.success) {
+                router.push("/");
+            }
+        });
+    };
+
+    if(!isAdmin) {
+        router.push("/");
     }
     
     return (
@@ -93,8 +84,22 @@ export default function DirectWrite() {
                 </div>
                 <div>
                     <Form {...form}>
-                        <form onSubmit={form.handleSubmit(onActions)} className="space-y-8">
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                             <div className="space-y-8 px-6">
+                            <FormField
+                                control={form.control}
+                                name="imageUrl"
+                                render={({field})=>(
+                                    <FormItem>
+                                        <FormControl>
+                                            <FileUpload
+                                                file={file}
+                                                onChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
                             <FormField
                                 control={form.control}
                                 name="title"
