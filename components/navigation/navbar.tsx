@@ -28,6 +28,9 @@ export default function Navbar() {
                         Write
                     </div>
                     <div>
+                        <Link href="/posts">Posts</Link>
+                    </div>
+                    <div>
                         <Link href="/about">About</Link>
                     </div>
                     {

@@ -10,6 +10,7 @@ export const CreatePosts = async (formData : PostsType) => {
     const post = await db.posts.create({
         data : {
             title : formData.title,
+            subtitle : formData.subtitle,
             content : formData.content,
             imgUrl : formData.imageUrl
         }

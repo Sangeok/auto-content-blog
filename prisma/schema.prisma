@@ -11,11 +11,12 @@ generator client {
 model Posts {
   id        Int      @id @default(autoincrement())
   title     String   @unique
+  subtitle  String
   content   String
+  likes     Int      @default(0)
   imgUrl    String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-
 }
 
 model Admin {

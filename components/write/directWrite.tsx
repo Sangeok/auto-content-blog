@@ -29,6 +29,7 @@ const formSchema = z.object({
     title : z
         .string()
         .min(1, {message : "Title is required"}),
+    subtitle : z.string().min(1, {message : "Subtitle is required"}),
     content : z.string().min(1, {message : "Content is required"}),
     imageUrl : z.string().min(1, {message : "Image is required"}),
 })
@@ -46,6 +47,7 @@ export default function DirectWrite() {
         resolver: zodResolver(formSchema),
         defaultValues : {
             title : "",
+            subtitle : "",
             content : "",
             imageUrl : "",
         },
@@ -110,6 +112,22 @@ export default function DirectWrite() {
                                             <Input
                                                 className="focus:border-2 focus:border-black border-gray-300 bg-white rounded-md" 
                                                 placeholder="title"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="subtitle"
+                                render={({field})=>(
+                                    <FormItem>
+                                        <FormLabel>SubTitle</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                className="focus:border-2 focus:border-black border-gray-300 bg-white rounded-md" 
+                                                placeholder="Subtitle"
                                                 {...field}
                                             />
                                         </FormControl>
