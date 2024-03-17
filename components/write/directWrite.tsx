@@ -23,7 +23,18 @@ import { startTransition, useEffect, useState, useTransition } from "react";
 import { useEdgeStore } from "@/lib/edgestore";
 import { SingleImageDropzone } from "../ui/singleImageDropZone";
 import { userStore } from "@/store/user-store";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { FindPosts } from "@/app/actions/findPosts";
+import { UpdatePosts } from "@/app/actions/updatePosts";
+
+interface WriterDirectProps {
+    title : string;
+    subtitle : string;
+    content : string;
+    imageUrl : string;
+    isEdit : boolean;
+    postId? : string;
+}
 
 const formSchema = z.object({
     title : z
@@ -36,7 +47,14 @@ const formSchema = z.object({
 
 export type PostsType = z.infer<typeof formSchema>;
 
-export default function DirectWrite() {
+export default function DirectWrite({
+    title,
+    subtitle,
+    content,
+    imageUrl,
+    postId,
+    isEdit = false
+}: WriterDirectProps) {
 
     const {isAdmin} = userStore();
     const router = useRouter();
@@ -46,16 +64,26 @@ export default function DirectWrite() {
     const form = useForm({
         resolver: zodResolver(formSchema),
         defaultValues : {
-            title : "",
-            subtitle : "",
-            content : "",
-            imageUrl : "",
+            title : title,
+            subtitle : subtitle,
+            content : content,
+            imageUrl : imageUrl,
         },
     })
 
     const [pending, startTransition] = useTransition();
 
     const onSubmit = async (data : PostsType) => {
+        if(isEdit && postId) {
+            startTransition(async () => {
+                const res = await UpdatePosts(data,postId);
+                if(res?.success) {
+                    alert("게시글 수정완료.");
+                    router.push("/");
+                }
+            });
+            return;
+        }
         startTransition(async () => {
             const res = await CreatePosts(data);
             if(res?.success) {
@@ -79,8 +107,10 @@ export default function DirectWrite() {
                     width={200}
                     height={200}
                     value={file}
+                    imgUrl={imageUrl}
                     onChange={(file) => {
                         setFile(file);
+                        console.log(file);
                     }}
                 />
                 </div>
@@ -144,6 +174,7 @@ export default function DirectWrite() {
                                         <Tiptap
                                             placeholder="content"
                                             onChange={field.onChange}
+                                            content={content}
                                         />
                                         </FormControl>
                                     </FormItem>

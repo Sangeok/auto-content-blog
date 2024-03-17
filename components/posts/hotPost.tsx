@@ -7,17 +7,19 @@ interface HotPostsProps {
     className? : string;
     title : string;
     imgUrl : string;
+    postId : number;
 }
 
 const HotPost = ({
     className,
     title,
     imgUrl,
+    postId,
 } : HotPostsProps) => {
     return (
         <Link
             className={`${className} sm:mt-0 sm:h-auto relative mt-7 block w-full h-96 hover:opacity-70`}
-            href="/"
+            href={`/posts/${postId}`}
         >
             <Image
                 src={imgUrl}

@@ -30,9 +30,6 @@ export default function Navbar() {
                     <div>
                         <Link href="/posts">Posts</Link>
                     </div>
-                    <div>
-                        <Link href="/about">About</Link>
-                    </div>
                     {
                         !isAdmin && (
                             <div

@@ -8,6 +8,7 @@ interface LatestPostProps {
     imgUrl : string;
     title : string;
     content : string;
+    postId : number;
     createdAt : Date;
     isSmallCard? : boolean;
     isLongCard? : boolean;
@@ -19,6 +20,7 @@ const LatestPost = ({
     title,
     content,
     createdAt,
+    postId,
     imgUrl,
     isSmallCard = false,
     isLongCard = false,
@@ -27,7 +29,7 @@ const LatestPost = ({
 
     return (
         <div className={className}>
-            <Link className="basis-full hover:opacity-70" href="/">
+            <Link className="basis-full hover:opacity-70" href={`/posts/${postId}`}>
                 <div className={`relative w-auto mb-3 ${imageHeight}`}>
                     <Image
                         src={imgUrl}
@@ -37,7 +39,7 @@ const LatestPost = ({
                 </div>
             </Link>
             <div className="basis-full">
-                <Link href="/">
+                <Link href={`/posts/${postId}`}>
                     <h4
                         className={`font-bold hover:text-accent-green
                             ${isSmallCard ? "text-base" : "text-lg"}

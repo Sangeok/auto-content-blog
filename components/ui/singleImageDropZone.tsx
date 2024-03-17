@@ -21,6 +21,7 @@ type InputProps = {
   onChange?: (file?: File) => void | Promise<void>;
   disabled?: boolean;
   dropzoneOptions?: Omit<DropzoneOptions, 'disabled'>;
+  imgUrl? : string;
 };
 const ERROR_MESSAGES = {
   fileTooLarge(maxSize: number) {
@@ -38,16 +39,19 @@ const ERROR_MESSAGES = {
 };
 const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { dropzoneOptions, width, height, value, className, disabled, onChange },
+    { dropzoneOptions, width, height, value, className, disabled, onChange, imgUrl },
     ref,
   ) => {
     const imageUrl = React.useMemo(() => {
-      if (typeof value === 'string') {
+     if (typeof value === 'string') {
         // in case a url is passed in, use it to display the image
         return value;
       } else if (value) {
         // in case a file is passed in, create a base64 url to display the image
         return URL.createObjectURL(value);
+      }
+      else if(imgUrl) {
+        return imgUrl;
       }
       return null;
     }, [value]);

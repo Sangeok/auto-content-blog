@@ -40,6 +40,7 @@ const PostsPage = async () => {
                             className={postClassName[idx]}
                             title={post.title}
                             imgUrl={post.imgUrl}
+                            postId={post.id}
                         />
                     ))
                 }
@@ -63,6 +64,7 @@ const PostsPage = async () => {
                                     title={post.title}
                                     content={post.content}
                                     createdAt={post.createdAt}
+                                    postId={post.id}
                                     isLongCard
                                 />
                             }
@@ -75,6 +77,7 @@ const PostsPage = async () => {
                                     title={post.title}
                                     content={post.content}
                                     createdAt={post.createdAt}
+                                    postId={post.id}
                                     isSmallCard
                                 />
                             }
