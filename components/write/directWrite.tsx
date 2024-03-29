@@ -55,7 +55,6 @@ export default function DirectWrite({
     postId,
     isEdit = false
 }: WriterDirectProps) {
-
     const {isAdmin} = userStore();
     const router = useRouter();
 

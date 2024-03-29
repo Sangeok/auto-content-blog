@@ -1,3 +1,5 @@
+"use client";
+
 import { 
     Dialog, 
     DialogContent, 
@@ -12,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { userStore } from "@/store/user-store";
 
 export default function PostModal() {
-    const { isOpen, onClose, type } = modalStore();
+    const { isOpen, onOpen, onClose, type } = modalStore();
     const {isAdmin} = userStore();
     const router = useRouter();
 
@@ -20,7 +22,10 @@ export default function PostModal() {
 
     const onClick = (values : string) => {
         if(values === "ai") {
-            router.push("/writer/ai");
+            if(isAdmin) {
+                return onOpen("ai");
+            }
+            return alert("You are not SangEok!");
         }
 
         else if(values === "direct") {

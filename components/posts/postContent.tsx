@@ -1,6 +1,7 @@
 "use client";
 
 import { DeletePosts } from "@/app/actions/deletePosts";
+import sanitizeHtml from "@/lib/sanitizeHtml";
 import { userStore } from "@/store/user-store";
 import { PencilLineIcon, Trash, X } from "lucide-react";
 import dynamic from "next/dynamic";
