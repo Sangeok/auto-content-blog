@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type openModalType = "login" | "post" | "ai";
+export type openModalType = "login" | "post";
 
 interface ModalType {
     type : openModalType | null;

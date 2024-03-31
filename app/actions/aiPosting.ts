@@ -4,7 +4,7 @@ import openai from "@/lib/openai";
 
 interface FormState {
     success : boolean
-    message : string
+    message : string;
 }
 
 export const AiPosting = async (
@@ -12,9 +12,7 @@ export const AiPosting = async (
     formData : FormData,
 ) : Promise<FormState> => {
 
-    const title = formData.get("title") as string;
-
-    console.log("title : " + title);
+    const title = formData.get("aiTitle") as string;
 
     const aiResponse = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
@@ -26,18 +24,20 @@ export const AiPosting = async (
             {
                 role : 'user',
                 content : `Create small blog post with html tags based on this title : ${title}
-                give me a 10 line.`
+                (Dont give me <!DOCTYPE html>,<html>,<head>,<title>,'<body> tags. Just give me the content inside <body> tag)
+                (Give me a word count of 2000-3000 words.)
+                `
+                
             },
         ],
     });
 
-    console.log(aiResponse.choices[0]);
+    console.log(aiResponse.choices[0].message.content);
 
     if(aiResponse) {
-        console.log("AI Response Success");
-        return {
-            success : true,
-            message : "AI Response Success"
+        if (aiResponse?.choices?.[0]?.message?.content) {
+            console.log("AI Response Success");
+            return { success: true, message: aiResponse.choices[0].message.content };
         }
     }
 

@@ -22,10 +22,7 @@ export default function PostModal() {
 
     const onClick = (values : string) => {
         if(values === "ai") {
-            if(isAdmin) {
-                return onOpen("ai");
-            }
-            return alert("You are not SangEok!");
+            router.push("/writer/ai");
         }
 
         else if(values === "direct") {

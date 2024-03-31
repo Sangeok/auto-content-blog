@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import LoginModal from "../modals/loginModal";
 import PostModal from "../modals/postModal";
-import AiPostModal from "../modals/aiPostModal";
 
 export const ModalProvider = () => {
     const [isMounted, setIsMounted] = useState(false);
@@ -18,7 +17,6 @@ export const ModalProvider = () => {
         <div>
             <LoginModal />
             <PostModal />
-            <AiPostModal />
         </div>
     )
 }
